@@ -6,13 +6,15 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123456
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
      # - ./db:/docker-entrypoint-initdb.d
+    networks:
+      - product
 
   backend:
     build:
@@ -23,6 +25,8 @@ services:
       - "8080:8080"
     depends_on:
       - db
+    networks:
+      - product
 
   frontend:
     build:
@@ -36,3 +40,7 @@ services:
 
 volumes:
   postgres_data:
+
+networks:
+  product:
+    driver: bridge

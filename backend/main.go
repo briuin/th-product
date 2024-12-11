@@ -15,14 +15,14 @@ func main() {
 	r := gin.Default()
 
 	// Initialize database
-	// initDB()
+	initDB()
 
 	log.Fatal(r.Run(":8080"))
 }
 
 func initDB() {
 	var err error
-	dsn := "host=database user=postgres password=123456 dbname=postgres port=5432 sslmode=disable"
+	dsn := "host=db user=postgres password=postgres dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to the database: %v", err)
