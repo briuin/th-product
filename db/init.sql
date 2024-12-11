@@ -1,0 +1,2 @@
+CREATE DATABASE product_db;
+GRANT ALL PRIVILEGES ON DATABASE product_db TO postgres;
