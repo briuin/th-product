@@ -42,7 +42,7 @@ func (controller *ProductController) GetAllProducts(c *gin.Context) {
 	products, err := controller.productService.GetAllProducts()
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "General Error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Service error: " + err.Error()})
 		return
 	}
 
@@ -52,13 +52,13 @@ func (controller *ProductController) GetAllProducts(c *gin.Context) {
 func (controller *ProductController) CreateProduct(c *gin.Context) {
 	var newProduct models.Product
 	if err := c.ShouldBindJSON(&newProduct); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Validation failed: " + err.Error()})
 		return
 	}
 	err := controller.productService.CreateProduct(newProduct)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "General Error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Service error: " + err.Error()})
 		return
 	}
 
@@ -68,13 +68,13 @@ func (controller *ProductController) CreateProduct(c *gin.Context) {
 func (controller *ProductController) UpdateProduct(c *gin.Context) {
 	var updatedProduct models.Product
 	if err := c.ShouldBindJSON(&updatedProduct); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Validation failed: " + err.Error()})
 		return
 	}
 	err := controller.productService.UpdateProduct(updatedProduct)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "General Error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Service error: " + err.Error()})
 		return
 	}
 
