@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { UploadService } from '../../services/upload.service';
 import { ProductService } from '../../services/product.service';
 import { tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-add-product-modal',
@@ -15,6 +16,7 @@ import { tap } from 'rxjs';
 export class AddProductModalComponent {
   @Output() onClose = new EventEmitter<void>();
 
+  private apiUrl = `${environment.apiUrl}`;
   uploadedImageUrl = '';
   isUploading = false;
 
@@ -54,7 +56,7 @@ export class AddProductModalComponent {
       this.isUploading = true;
       this.uploadService.uploadImage(file).subscribe({
         next: (response) => {
-          this.uploadedImageUrl = `http://localhost:8080${response.url}`;
+          this.uploadedImageUrl = `${this.apiUrl}${response.url}`;
           this.product.picture = response.url; 
           this.isUploading = false;
         },

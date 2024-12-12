@@ -4,6 +4,7 @@ import { ProductService } from '../../services/product.service';
 import { UploadService } from '../../services/upload.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit {
+  apiUrl = environment.apiUrl;
   product: any = null;
   isUploading: boolean = false;
   isSaving: boolean = false;

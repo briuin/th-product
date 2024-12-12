@@ -5,6 +5,7 @@ import { AddProductModalComponent } from '../add-product-modal/add-product-modal
 import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-product-list',
@@ -14,6 +15,7 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent {
+    apiUrl = environment.apiUrl;
     products: Product[] = [];
     filteredProducts: Product[] = [];
     searchQuery: string = '';

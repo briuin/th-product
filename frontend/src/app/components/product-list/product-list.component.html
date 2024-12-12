@@ -39,7 +39,7 @@
       class="border rounded-lg p-4 shadow-md hover:shadow-lg transition"
     >
       <img
-        [src]="'http://localhost:8080'+product.picture"
+        [src]="apiUrl + '' + product.picture"
         alt="{{ product.name }}"
         class="h-40 w-full object-cover rounded-md"
       />
