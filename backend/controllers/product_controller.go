@@ -9,10 +9,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var productService = services.NewProductService()
+type ProductController struct {
+	productService services.ProductService
+}
+
+func NewProductController(service services.ProductService) *ProductController {
+	return &ProductController{productService: service}
+}
 
 // GetProduct handles GET /products/:id
-func GetProduct(c *gin.Context) {
+func (controller *ProductController) GetProduct(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
@@ -20,7 +26,7 @@ func GetProduct(c *gin.Context) {
 		return
 	}
 
-	product, err := productService.GetProductByID(uint(id))
+	product, err := controller.productService.GetProductByID(uint(id))
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
@@ -28,20 +34,11 @@ func GetProduct(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, product)
-
-	// for _, product := range products {
-	// 	if product.ID == uint(id) {
-	// 		c.JSON(http.StatusOK, product)
-	// 		return
-	// 	}
-	// }
-
-	//c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
 }
 
 // GetAllProducts handles GET /products
-func GetAllProducts(c *gin.Context) {
-	products, err := productService.GetAllProducts()
+func (controller *ProductController) GetAllProducts(c *gin.Context) {
+	products, err := controller.productService.GetAllProducts()
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "General Error"})

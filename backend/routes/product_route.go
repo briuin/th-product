@@ -6,10 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ProductRoutes(router *gin.Engine) {
-	productGroup := router.Group("/products")
+func ProductRoutes(r *gin.Engine, productController *controllers.ProductController) {
+	productGroup := r.Group("/products")
 	{
-		productGroup.GET("/", controllers.GetAllProducts)
-		productGroup.GET("/:id", controllers.GetProduct)
+		productGroup.GET("/", productController.GetAllProducts)
+		productGroup.GET("/:id", productController.GetProduct)
 	}
 }
