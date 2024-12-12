@@ -18,6 +18,10 @@ func (t ProductRepositoryStub) FindAll() (products []models.Product, err error) 
 	var result []models.Product = []models.Product{
 		{ID: 1, Name: "Laptop", Type: "Electronics", Picture: "laptop.jpg", Price: 999.99, Description: "High-performance laptop"},
 		{ID: 2, Name: "Table", Type: "Furniture", Picture: "table.jpg", Price: 199.99, Description: "Wooden dining table"},
+		{ID: 3, Name: "Laptop 2", Type: "Electronics", Picture: "laptop.jpg", Price: 999.99, Description: "High-performance laptop"},
+		{ID: 4, Name: "Table 2", Type: "Furniture", Picture: "table.jpg", Price: 199.99, Description: "Wooden dining table"},
+		{ID: 5, Name: "Laptop 3", Type: "Electronics", Picture: "laptop.jpg", Price: 999.99, Description: "High-performance laptop"},
+		{ID: 6, Name: "Table 3", Type: "Furniture", Picture: "table.jpg", Price: 199.99, Description: "Wooden dining table"},
 	}
 	return result, nil
 }
