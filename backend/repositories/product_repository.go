@@ -6,5 +6,8 @@ import (
 
 type ProductRepository interface {
 	FindAll() ([]models.Product, error)
-	FindById(productId uint) (task models.Product, err error)
+	FindById(productId uint) (product models.Product, err error)
+	Create(product models.Product) error
+	Update(product models.Product) error
+	Delete(productId uint) error
 }

@@ -20,3 +20,15 @@ func (s *DefaultProductService) GetProductByID(id uint) (models.Product, error) 
 func (s *DefaultProductService) GetAllProducts() ([]models.Product, error) {
 	return s.repo.FindAll()
 }
+
+func (s *DefaultProductService) CreateProduct(product models.Product) error {
+	return s.repo.Create(product)
+}
+
+func (s *DefaultProductService) UpdateProduct(product models.Product) error {
+	return s.repo.Update(product)
+}
+
+func (s *DefaultProductService) DeleteProduct(id uint) error {
+	return s.repo.Delete(id)
+}

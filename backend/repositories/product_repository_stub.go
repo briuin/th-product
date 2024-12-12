@@ -26,3 +26,15 @@ func (t ProductRepositoryStub) FindById(productId uint) (task models.Product, er
 	var product models.Product = models.Product{ID: 1, Name: "Laptop", Type: "Electronics", Picture: "laptop.jpg", Price: 999.99, Description: "High-performance laptop"}
 	return product, nil
 }
+
+func (t ProductRepositoryStub) Create(product models.Product) (err error) {
+	return nil
+}
+
+func (t ProductRepositoryStub) Update(product models.Product) (err error) {
+	return nil
+}
+
+func (t ProductRepositoryStub) Delete(productId uint) (err error) {
+	return nil
+}

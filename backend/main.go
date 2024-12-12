@@ -8,6 +8,7 @@ import (
 
 	"product-management/controllers"
 	"product-management/database"
+	"product-management/models"
 	"product-management/repositories"
 	"product-management/routes"
 	"product-management/services"
@@ -20,7 +21,13 @@ func main() {
 
 	db = database.Connect()
 
-	productRepository := repositories.NewProductRepositoryStub(db)
+	err := db.AutoMigrate(&models.Product{})
+	if err != nil {
+		log.Fatalf("Failed to migrate database: %v", err)
+	}
+	log.Println("Database migration successful")
+
+	productRepository := repositories.NewProductRepositoryPostgre(db)
 	productService, err := services.NewProductService(productRepository)
 
 	if err != nil {

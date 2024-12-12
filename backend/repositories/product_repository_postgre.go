@@ -37,3 +37,15 @@ func (t ProductRepositoryPostgre) FindById(productId uint) (product models.Produ
 
 	return product, nil
 }
+
+func (t ProductRepositoryPostgre) Create(product models.Product) (err error) {
+	return nil
+}
+
+func (t ProductRepositoryPostgre) Update(product models.Product) (err error) {
+	return nil
+}
+
+func (t ProductRepositoryPostgre) Delete(productId uint) (err error) {
+	return nil
+}

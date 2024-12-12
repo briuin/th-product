@@ -11,5 +11,7 @@ func ProductRoutes(r *gin.Engine, productController *controllers.ProductControll
 	{
 		productGroup.GET("/", productController.GetAllProducts)
 		productGroup.GET("/:id", productController.GetProduct)
+		productGroup.POST("/", productController.CreateProduct)
+		productGroup.PUT("/", productController.UpdateProduct)
 	}
 }

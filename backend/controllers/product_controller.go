@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"product-management/models"
 	"product-management/services"
 
 	"github.com/gin-gonic/gin"
@@ -46,4 +47,36 @@ func (controller *ProductController) GetAllProducts(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, products)
+}
+
+func (controller *ProductController) CreateProduct(c *gin.Context) {
+	var newProduct models.Product
+	if err := c.ShouldBindJSON(&newProduct); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err := controller.productService.CreateProduct(newProduct)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "General Error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
+}
+
+func (controller *ProductController) UpdateProduct(c *gin.Context) {
+	var updatedProduct models.Product
+	if err := c.ShouldBindJSON(&updatedProduct); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err := controller.productService.UpdateProduct(updatedProduct)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "General Error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
 }
