@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { AddProductModalComponent } from '../add-product-modal/add-product-modal.component';
 import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddProductModalComponent], 
+  imports: [CommonModule, FormsModule, AddProductModalComponent, RouterModule], 
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
@@ -41,11 +42,5 @@ export class ProductListComponent {
   
     closeAddProductModal(): void {
       this.showAddModal = false;
-    }
-  
-    viewProduct(id: number): void {
-    }
-  
-    editProduct(product: any): void {
     }
 }

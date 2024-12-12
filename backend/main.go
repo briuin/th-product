@@ -33,7 +33,7 @@ func main() {
 	}
 	log.Println("Database migration successful")
 
-	productRepository := repositories.NewProductRepositoryStub(db)
+	productRepository := repositories.NewProductRepositoryPostgre(db)
 	productService, err := services.NewProductService(productRepository)
 
 	if err != nil {

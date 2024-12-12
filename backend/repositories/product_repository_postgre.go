@@ -39,13 +39,41 @@ func (t ProductRepositoryPostgre) FindById(productId uint) (product models.Produ
 }
 
 func (t ProductRepositoryPostgre) Create(product models.Product) (err error) {
+	result := t.Db.Create(&product)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
 
 func (t ProductRepositoryPostgre) Update(product models.Product) (err error) {
+	var existingProduct models.Product
+	if err := t.Db.First(&existingProduct, product.ID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("product not found")
+		}
+		return err
+	}
+
+	result := t.Db.Save(&product)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
 
 func (t ProductRepositoryPostgre) Delete(productId uint) (err error) {
+	var product models.Product
+	if err := t.Db.First(&product, productId).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("product not found")
+		}
+		return err
+	}
+
+	result := t.Db.Delete(&product)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }

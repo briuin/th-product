@@ -1,0 +1,115 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">Product Details</h1>
+
+  <div *ngIf="product" class="space-y-4">
+    <!-- Product Image -->
+    <div class="flex justify-center">
+      <img
+        *ngIf="product.picture"
+        [src]="'http://localhost:8080' + product.picture"
+        alt="Product Image"
+        class="w-48 h-48 object-cover rounded"
+      />
+    </div>
+
+    <!-- Product Name -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Name</label>
+      <p
+        *ngIf="!isEditing"
+        class="mt-1 text-lg font-semibold text-gray-900"
+      >
+        {{ product.name }}
+      </p>
+      <input
+        *ngIf="isEditing"
+        type="text"
+        [(ngModel)]="product.name"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+        placeholder="Enter product name"
+      />
+    </div>
+
+    <!-- Product Type -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Type</label>
+      <p
+        *ngIf="!isEditing"
+        class="mt-1 text-lg font-semibold text-gray-900"
+      >
+        {{ product.type }}
+      </p>
+      <input
+        *ngIf="isEditing"
+        type="text"
+        [(ngModel)]="product.type"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+        placeholder="Enter product type"
+      />
+    </div>
+
+    <!-- Product Price -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Price</label>
+      <p
+        *ngIf="!isEditing"
+        class="mt-1 text-lg font-semibold text-gray-900"
+      >
+        ${{ product.price }}
+      </p>
+      <input
+        *ngIf="isEditing"
+        type="number"
+        [(ngModel)]="product.price"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+        placeholder="Enter product price"
+      />
+    </div>
+
+    <!-- Product Description -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <p
+        *ngIf="!isEditing"
+        class="mt-1 text-gray-600"
+      >
+        {{ product.description }}
+      </p>
+      <textarea
+        *ngIf="isEditing"
+        [(ngModel)]="product.description"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+        placeholder="Enter product description"
+      ></textarea>
+    </div>
+
+    <!-- Edit and Save Actions -->
+    <div class="flex justify-end space-x-4 mt-6">
+      <button
+        *ngIf="!isEditing"
+        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        (click)="toggleEdit()"
+      >
+        Edit
+      </button>
+
+      <div *ngIf="isEditing" class="flex space-x-4">
+        <button
+          class="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
+          (click)="cancelEdit()"
+          [disabled]="isSaving || isUploading"
+        >
+          Cancel
+        </button>
+        <button
+          class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+          (click)="saveProduct()"
+          [disabled]="isSaving || isUploading"
+        >
+          <span *ngIf="isSaving">Saving...</span>
+          <span *ngIf="!isSaving">Save</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
