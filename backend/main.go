@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
@@ -18,6 +19,8 @@ var db *gorm.DB
 
 func main() {
 	r := gin.Default()
+
+	r.Use(cors.Default())
 
 	db = database.Connect()
 
