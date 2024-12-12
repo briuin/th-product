@@ -22,6 +22,9 @@ func main() {
 
 	r.Use(cors.Default())
 
+	uploadDir := "./uploads"
+	r.Static("/uploads", uploadDir)
+
 	db = database.Connect()
 
 	err := db.AutoMigrate(&models.Product{})
@@ -38,7 +41,8 @@ func main() {
 	}
 
 	productController := controllers.NewProductController(productService)
-	routes.ProductRoutes(r, productController)
+	uploadController := controllers.NewUploadController(uploadDir)
+	routes.ProductRoutes(r, productController, uploadController)
 
 	log.Fatal(r.Run(":8080"))
 }

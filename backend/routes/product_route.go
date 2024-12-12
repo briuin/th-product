@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ProductRoutes(r *gin.Engine, productController *controllers.ProductController) {
+func ProductRoutes(r *gin.Engine, productController *controllers.ProductController, uploadController *controllers.UploadController) {
 	productGroup := r.Group("/products")
 	{
 		productGroup.GET("/", productController.GetAllProducts)
@@ -14,4 +14,6 @@ func ProductRoutes(r *gin.Engine, productController *controllers.ProductControll
 		productGroup.POST("/", productController.CreateProduct)
 		productGroup.PUT("/", productController.UpdateProduct)
 	}
+
+	r.POST("/upload", uploadController.UploadImage)
 }

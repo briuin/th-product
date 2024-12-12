@@ -1,0 +1,86 @@
+<div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <button
+        class="absolute top-3 right-3 text-gray-600 hover:text-red-500"
+        (click)="closeModal()"
+      >
+        &times;
+      </button>
+  
+
+      <h2 class="text-xl font-bold mb-4">Add Product</h2>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Name</label>
+          <input
+            type="text"
+            [(ngModel)]="product.name"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+            placeholder="Enter product name"
+          />
+        </div>
+  
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Type</label>
+          <input
+            type="text"
+            [(ngModel)]="product.type"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+            placeholder="Enter product type"
+          />
+        </div>
+  
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Price</label>
+          <input
+            type="number"
+            [(ngModel)]="product.price"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+            placeholder="Enter product price"
+          />
+        </div>
+  
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Description</label>
+          <textarea
+            [(ngModel)]="product.description"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+            placeholder="Enter product description"
+          ></textarea>
+        </div>
+  
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Image</label>
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
+          />
+          <div *ngIf="isUploading" class="text-blue-500 mt-2">Uploading...</div>
+          <img
+            *ngIf="uploadedImageUrl"
+            [src]="uploadedImageUrl"
+            alt="Uploaded"
+            class="mt-2 w-32 h-32 object-cover rounded"
+          />
+        </div>
+      </div>
+  
+      <div class="flex justify-end mt-6 space-x-3">
+        <button
+          class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+          (click)="closeModal()"
+        >
+          Cancel
+        </button>
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          (click)="saveProduct()"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+  
