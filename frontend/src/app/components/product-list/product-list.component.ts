@@ -30,7 +30,7 @@ export class ProductListComponent {
     }
   
     loadProducts(): void {
-      this.productService.getProducts().subscribe((data: Product[]) => {
+      this.productService.getProducts(this.searchQuery).subscribe((data: Product[]) => {
         this.products = data;
         this.filteredProducts = this.products;
       });
@@ -42,5 +42,13 @@ export class ProductListComponent {
   
     closeAddProductModal(): void {
       this.showAddModal = false;
+    }
+
+    applyFilter() {
+       this.loadProducts();
+    }
+
+    resetFilter() {
+
     }
 }

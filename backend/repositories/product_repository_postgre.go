@@ -15,8 +15,12 @@ func NewProductRepositoryPostgre(Db *gorm.DB) ProductRepository {
 	return &ProductRepositoryPostgre{Db: Db}
 }
 
-func (t ProductRepositoryPostgre) FindAll() (products []models.Product, err error) {
-	results := t.Db.Find(&products)
+func (t ProductRepositoryPostgre) FindAll(name string) (products []models.Product, err error) {
+	query := t.Db.Model(&models.Product{})
+	if name != "" {
+		query = query.Where("name LIKE ?", "%"+name+"%")
+	}
+	results := query.Find(&products)
 	if results.Error != nil {
 		return nil, results.Error
 	}

@@ -17,8 +17,8 @@ func (s *DefaultProductService) GetProductByID(id uint) (models.Product, error) 
 	return s.repo.FindById(id)
 }
 
-func (s *DefaultProductService) GetAllProducts() ([]models.Product, error) {
-	return s.repo.FindAll()
+func (s *DefaultProductService) GetAllProducts(name string) ([]models.Product, error) {
+	return s.repo.FindAll(name)
 }
 
 func (s *DefaultProductService) CreateProduct(product models.Product) error {

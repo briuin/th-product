@@ -25,7 +25,7 @@ func TestFindAll(t *testing.T) {
 	db.Create(&models.Product{Name: "Test Product 2", Price: 200})
 
 	// Test FindAll
-	products, err := repo.FindAll()
+	products, err := repo.FindAll("")
 	assert.NoError(t, err)
 	assert.Len(t, products, 2)
 }
