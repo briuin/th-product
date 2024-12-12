@@ -6,6 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"product-management/routes"
 )
 
 var db *gorm.DB
@@ -16,6 +18,8 @@ func main() {
 
 	// Initialize database
 	initDB()
+
+	routes.ProductRoutes(r)
 
 	log.Fatal(r.Run(":8080"))
 }
