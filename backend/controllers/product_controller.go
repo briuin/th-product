@@ -43,8 +43,8 @@ func (controller *ProductController) GetAllProducts(c *gin.Context) {
 		SearchText:    c.DefaultQuery("name", ""),
 		Page:          parseQueryParamToInt(c, "page", 1),
 		PerPage:       parseQueryParamToInt(c, "perPage", 10),
-		SortBy:        c.DefaultQuery("sortBy", "name"),
-		SortDirection: c.DefaultQuery("sortDirection", "asc"),
+		SortBy:        c.DefaultQuery("sortBy", "id"),
+		SortDirection: c.DefaultQuery("sortDirection", "desc"),
 	}
 
 	products, total, err := controller.productService.GetAllProducts(query)

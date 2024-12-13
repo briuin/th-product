@@ -4,6 +4,7 @@
   <!-- Back to Product List Button -->
   <div class="mb-4">
     <button
+      data-spec="product-detail-back-button"
       class="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
       (click)="navigateBackToList()"
     >
@@ -16,14 +17,17 @@
     <div class="flex justify-center">
       <img
         *ngIf="product.picture"
-        [src]="apiUrl+''+product.picture"
+        [src]="apiUrl + '' + product.picture"
         alt="Product Image"
         class="w-48 h-48 object-cover rounded"
       />
     </div>
     <div *ngIf="isEditing">
-      <label class="block text-sm font-medium text-gray-700">Change Image</label>
+      <label class="block text-sm font-medium text-gray-700"
+        >Change Image</label
+      >
       <input
+        data-spec="product-detail-image"
         type="file"
         (change)="onFileSelected($event)"
         class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
@@ -34,13 +38,11 @@
     <!-- Product Name -->
     <div>
       <label class="block text-sm font-medium text-gray-700">Name</label>
-      <p
-        *ngIf="!isEditing"
-        class="mt-1 text-lg font-semibold text-gray-900"
-      >
+      <p *ngIf="!isEditing" class="mt-1 text-lg font-semibold text-gray-900">
         {{ product.name }}
       </p>
       <input
+        data-spec="product-detail-name"
         *ngIf="isEditing"
         type="text"
         [(ngModel)]="product.name"
@@ -52,13 +54,11 @@
     <!-- Product Type -->
     <div>
       <label class="block text-sm font-medium text-gray-700">Type</label>
-      <p
-        *ngIf="!isEditing"
-        class="mt-1 text-lg font-semibold text-gray-900"
-      >
+      <p *ngIf="!isEditing" class="mt-1 text-lg font-semibold text-gray-900">
         {{ product.type }}
       </p>
       <input
+        data-spec="product-detail-type"
         *ngIf="isEditing"
         type="text"
         [(ngModel)]="product.type"
@@ -70,13 +70,11 @@
     <!-- Product Price -->
     <div>
       <label class="block text-sm font-medium text-gray-700">Price</label>
-      <p
-        *ngIf="!isEditing"
-        class="mt-1 text-lg font-semibold text-gray-900"
-      >
+      <p *ngIf="!isEditing" class="mt-1 text-lg font-semibold text-gray-900">
         ${{ product.price }}
       </p>
       <input
+        data-spec="product-detail-price"
         *ngIf="isEditing"
         type="number"
         [(ngModel)]="product.price"
@@ -88,13 +86,11 @@
     <!-- Product Description -->
     <div>
       <label class="block text-sm font-medium text-gray-700">Description</label>
-      <p
-        *ngIf="!isEditing"
-        class="mt-1 text-gray-600"
-      >
+      <p *ngIf="!isEditing" class="mt-1 text-gray-600">
         {{ product.description }}
       </p>
       <textarea
+        data-spec="product-detail-description"
         *ngIf="isEditing"
         [(ngModel)]="product.description"
         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
@@ -105,6 +101,7 @@
     <!-- Edit and Save Actions -->
     <div class="flex justify-end space-x-4 mt-6">
       <button
+        data-spec="product-detail-edit-button"
         *ngIf="!isEditing"
         class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
         (click)="toggleEdit()"
@@ -114,6 +111,7 @@
 
       <div *ngIf="isEditing" class="flex space-x-4">
         <button
+          data-spec="product-detail-cancel-button"
           class="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
           (click)="cancelEdit()"
           [disabled]="isSaving || isUploading"
@@ -121,6 +119,7 @@
           Cancel
         </button>
         <button
+          data-spec="product-detail-save-button"
           class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
           (click)="saveProduct()"
           [disabled]="isSaving || isUploading"

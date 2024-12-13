@@ -21,8 +21,8 @@ export class ProductListComponent {
   searchQuery: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 1;
-  sortBy: string = 'name';
-  sortDirection: string = 'asc';
+  sortBy: string = '';
+  sortDirection: string = '';
   limitOptions: number[] = [1, 5, 10, 20, 50];
   products$!: Observable<Product[]>;
   total$!: Observable<number>;
@@ -45,7 +45,7 @@ export class ProductListComponent {
       perPage: this.itemsPerPage,
     };
 
-    const response$ = this.productService.getProducts(queryParams);
+    const response$ = this.productService.getProducts(queryParams).pipe(take(1));
 
     this.products$ = response$.pipe(map((response: any) => response.data));
     this.total$ = response$.pipe(map((response: any) => response.total));
