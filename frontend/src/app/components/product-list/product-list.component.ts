@@ -18,8 +18,6 @@ import { map, Observable, take } from 'rxjs';
 })
 export class ProductListComponent {
   apiUrl = environment.apiUrl;
-  products: Product[] = [];
-  filteredProducts: Product[] = [];
   searchQuery: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 1;

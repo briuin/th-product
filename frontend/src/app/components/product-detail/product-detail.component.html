@@ -1,15 +1,34 @@
 <div class="container mx-auto p-4">
   <h1 class="text-2xl font-bold mb-4">Product Details</h1>
 
+  <!-- Back to Product List Button -->
+  <div class="mb-4">
+    <button
+      class="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
+      (click)="navigateBackToList()"
+    >
+      Back to Product List
+    </button>
+  </div>
+
   <div *ngIf="product" class="space-y-4">
     <!-- Product Image -->
     <div class="flex justify-center">
       <img
         *ngIf="product.picture"
-        [src]="apiUrl + product.picture"
+        [src]="apiUrl+''+product.picture"
         alt="Product Image"
         class="w-48 h-48 object-cover rounded"
       />
+    </div>
+    <div *ngIf="isEditing">
+      <label class="block text-sm font-medium text-gray-700">Change Image</label>
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
+      />
+      <div *ngIf="isUploading" class="text-blue-500 mt-2">Uploading...</div>
     </div>
 
     <!-- Product Name -->

@@ -5,6 +5,7 @@ import { UploadService } from '../../services/upload.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../environments/environment';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-product-detail',
@@ -15,10 +16,11 @@ import { environment } from '../../../environments/environment';
 })
 export class ProductDetailComponent implements OnInit {
   apiUrl = environment.apiUrl;
-  product: any = null;
+  product!: Product;
   isUploading: boolean = false;
   isSaving: boolean = false;
   isEditing: boolean = false;
+  uploadedImageUrl: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -59,7 +61,7 @@ export class ProductDetailComponent implements OnInit {
       this.isUploading = true;
       this.uploadService.uploadImage(file).subscribe({
         next: (response) => {
-          this.product.picture = response.url;
+          this.uploadedImageUrl = response.url;
           this.isUploading = false;
         },
         error: (err) => {
@@ -74,6 +76,10 @@ export class ProductDetailComponent implements OnInit {
     if (!this.product.name || !this.product.type || this.product.price <= 0) {
       alert('Please fill in all required fields.');
       return;
+    }
+
+    if (this.uploadedImageUrl) {
+      this.product.picture = this.uploadedImageUrl;
     }
 
     this.isSaving = true;
@@ -93,6 +99,10 @@ export class ProductDetailComponent implements OnInit {
 
   cancelEdit(): void {
     this.isEditing = false;
-    this.loadProduct(this.product.id); 
+    this.loadProduct(this.product.id!); 
+  }
+
+  navigateBackToList(): void {
+    this.router.navigate(['/']);
   }
 }
