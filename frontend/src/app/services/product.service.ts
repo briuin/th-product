@@ -12,10 +12,20 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts(name = ''): Observable<Product[]> {
+  getProducts(
+    name = '',
+    sortBy: string,
+    sortDirection: string
+  ): Observable<Product[]> {
     let params = new HttpParams();
     if (name) {
       params = params.set('name', name);
+    }
+    if (sortBy) {
+      params = params.set('sortBy', sortBy);
+    }
+    if (sortDirection) {
+      params = params.set('sortDirection', sortDirection);
     }
     return this.http.get<Product[]>(this.apiUrl, { params });
   }

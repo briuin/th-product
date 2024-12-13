@@ -14,7 +14,7 @@ func NewProductRepositoryStub(Db *gorm.DB) ProductRepository {
 	return &ProductRepositoryStub{Db: Db}
 }
 
-func (t ProductRepositoryStub) FindAll(name string) (products []models.Product, err error) {
+func (t ProductRepositoryStub) FindAll(name string, sortBy string, sortDirection string) (products []models.Product, err error) {
 	var result []models.Product = []models.Product{
 		{ID: 1, Name: "Laptop", Type: "Electronics", Picture: "laptop.jpg", Price: 999.99, Description: "High-performance laptop"},
 		{ID: 2, Name: "Table", Type: "Furniture", Picture: "table.jpg", Price: 199.99, Description: "Wooden dining table"},

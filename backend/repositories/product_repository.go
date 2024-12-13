@@ -5,7 +5,7 @@ import (
 )
 
 type ProductRepository interface {
-	FindAll(name string) ([]models.Product, error)
+	FindAll(name string, sortBy string, sortDirection string) ([]models.Product, error)
 	FindById(productId uint) (product models.Product, err error)
 	Create(product models.Product) error
 	Update(product models.Product) error

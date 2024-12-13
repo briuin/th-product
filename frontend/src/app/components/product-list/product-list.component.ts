@@ -22,6 +22,8 @@ export class ProductListComponent {
     currentPage: number = 1;
     itemsPerPage: number = 6;
     totalPages: number = 0;
+    sortBy: string = 'price';
+  sortDirection: string = 'asc';
   
     showAddModal = false;
   
@@ -32,7 +34,7 @@ export class ProductListComponent {
     }
   
     loadProducts(): void {
-      this.productService.getProducts(this.searchQuery).subscribe((data: Product[]) => {
+      this.productService.getProducts(this.searchQuery, this.sortBy, this.sortDirection).subscribe((data: Product[]) => {
         this.products = data;
         this.filteredProducts = this.products;
       });
@@ -51,6 +53,17 @@ export class ProductListComponent {
     }
 
     resetFilter() {
-
+        this.searchQuery = "";
+        this.loadProducts();
     }
+
+    applySort(sortBy: string): void {
+        if (this.sortBy === sortBy) {
+          this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          this.sortBy = sortBy;
+          this.sortDirection = 'asc';
+        }
+        this.loadProducts();
+      }
 }

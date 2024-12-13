@@ -40,7 +40,9 @@ func (controller *ProductController) GetProduct(c *gin.Context) {
 // GetAllProducts handles GET /products
 func (controller *ProductController) GetAllProducts(c *gin.Context) {
 	nameFilter := c.Query("name")
-	products, err := controller.productService.GetAllProducts(nameFilter)
+	sortBy := c.DefaultQuery("sortBy", "price")
+	sortDirection := c.DefaultQuery("sortDirection", "asc")
+	products, err := controller.productService.GetAllProducts(nameFilter, sortBy, sortDirection)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Service error: " + err.Error()})
