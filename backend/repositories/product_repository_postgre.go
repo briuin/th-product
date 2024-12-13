@@ -25,7 +25,8 @@ func (t ProductRepositoryPostgre) FindAll(query models.ProductQuery) (products [
 		return nil, 0, err
 	}
 
-	dbQuery = dbQuery.Offset(query.Offset).Limit(query.Limit).Order(query.SortBy + " " + query.SortDirection)
+	offset := (query.Page - 1) * query.PerPage
+	dbQuery = dbQuery.Offset(offset).Limit(query.PerPage).Order(query.SortBy + " " + query.SortDirection)
 	result := dbQuery.Find(&products)
 	if result.Error != nil {
 		return nil, 0, result.Error

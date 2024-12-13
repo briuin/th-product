@@ -39,25 +39,26 @@
       class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
       (click)="applySort('name')"
     >
-      Name {{ sortBy === 'name' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}
+      Name {{ sortBy === "name" ? (sortDirection === "asc" ? "↑" : "↓") : "" }}
     </button>
     <button
       class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
       (click)="applySort('price')"
     >
-      Price {{ sortBy === 'price' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}
+      Price
+      {{ sortBy === "price" ? (sortDirection === "asc" ? "↑" : "↓") : "" }}
     </button>
     <button
       class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
       (click)="applySort('type')"
     >
-      Type {{ sortBy === 'type' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}
+      Type {{ sortBy === "type" ? (sortDirection === "asc" ? "↑" : "↓") : "" }}
     </button>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     <div
-      *ngFor="let product of filteredProducts"
+      *ngFor="let product of products$ | async"
       class="border rounded-lg p-4 shadow-md hover:shadow-lg transition"
     >
       <img
@@ -90,16 +91,26 @@
     </div>
     <div class="flex items-center space-x-4">
       <button
-        class="px-4 py-2 bg-gray-300 rounded-md"
+        class="px-4 py-2 rounded-md"
+        [ngClass]="{
+          'bg-gray-300 cursor-not-allowed': currentPage === 1,
+          'bg-blue-500 text-white hover:bg-blue-600': currentPage > 1
+        }"
         [disabled]="currentPage === 1"
         (click)="changePage(currentPage - 1)"
       >
         Previous
       </button>
-      <span>Page {{ currentPage }} of {{ totalPage }}</span>
+      <span>Page {{ currentPage }} of {{ totalPage$ | async }}</span>
       <button
-        class="px-4 py-2 bg-gray-300 rounded-md"
-        [disabled]="currentPage === totalPage"
+        class="px-4 py-2 rounded-md"
+        [ngClass]="{
+          'bg-gray-300 cursor-not-allowed':
+            currentPage === ((totalPage$ | async) || 1),
+          'bg-blue-500 text-white hover:bg-blue-600':
+            currentPage < ((totalPage$ | async) || 1)
+        }"
+        [disabled]="currentPage === (totalPage$ | async)"
         (click)="changePage(currentPage + 1)"
       >
         Next

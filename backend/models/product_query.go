@@ -2,8 +2,8 @@ package models
 
 type ProductQuery struct {
 	SearchText    string `json:"searchText"`
-	Offset        int    `json:"offset"`
-	Limit         int    `json:"limit"`
+	Page          int    `json:"page"`
+	PerPage       int    `json:"perPage"`
 	SortBy        string `json:"sortBy"`
 	SortDirection string `json:"sortDirection"`
 }

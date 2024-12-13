@@ -41,8 +41,8 @@ func (controller *ProductController) GetProduct(c *gin.Context) {
 func (controller *ProductController) GetAllProducts(c *gin.Context) {
 	query := models.ProductQuery{
 		SearchText:    c.DefaultQuery("name", ""),
-		Offset:        parseQueryParamToInt(c, "page", 0),
-		Limit:         parseQueryParamToInt(c, "perPage", 10),
+		Page:          parseQueryParamToInt(c, "page", 1),
+		PerPage:       parseQueryParamToInt(c, "perPage", 10),
 		SortBy:        c.DefaultQuery("sortBy", "name"),
 		SortDirection: c.DefaultQuery("sortDirection", "asc"),
 	}
@@ -55,10 +55,10 @@ func (controller *ProductController) GetAllProducts(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data":   products,
-		"total":  total,
-		"limit":  query.Limit,
-		"offset": query.Offset,
+		"data":    products,
+		"total":   total,
+		"perPage": query.PerPage,
+		"page":    query.Page,
 	})
 }
 

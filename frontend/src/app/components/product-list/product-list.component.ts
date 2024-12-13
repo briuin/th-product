@@ -7,6 +7,7 @@ import { ProductService } from '../../services/product.service';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { QueryParams } from '../../models/query-params.model';
+import { map, Observable, take } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -22,18 +23,16 @@ export class ProductListComponent {
   searchQuery: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 1;
-  total: number = 0;
   sortBy: string = 'name';
   sortDirection: string = 'asc';
   limitOptions: number[] = [1, 5, 10, 20, 50];
+  products$!: Observable<Product[]>;
+  total$!: Observable<number>;
+  totalPage$!: Observable<number>;
 
   showAddModal = false;
 
   constructor(private productService: ProductService) {}
-
-  get totalPage() {
-    return Math.ceil(this.total / this.itemsPerPage);
-  }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -41,20 +40,18 @@ export class ProductListComponent {
 
   loadProducts(): void {
     const queryParams: QueryParams = {
-        searchText: this.searchQuery,
-        sortBy: this.sortBy,
-        sortDirection: this.sortDirection,
-        page: this.currentPage,
-        perPage: this.itemsPerPage,
-      };
+      searchText: this.searchQuery,
+      sortBy: this.sortBy,
+      sortDirection: this.sortDirection,
+      page: this.currentPage,
+      perPage: this.itemsPerPage,
+    };
 
-    this.productService
-      .getProducts(queryParams)
-      .subscribe((response: any) => {
-        this.products = response.data;
-        this.filteredProducts = this.products;
-        this.total = response.total;
-      });
+    const response$ = this.productService.getProducts(queryParams);
+
+    this.products$ = response$.pipe(map((response: any) => response.data));
+    this.total$ = response$.pipe(map((response: any) => response.total));
+    this.totalPage$ = response$.pipe(map((response: any) => Math.ceil(response.total / this.itemsPerPage)));
   }
 
   openAddProductModal(): void {
@@ -85,10 +82,12 @@ export class ProductListComponent {
   }
 
   changePage(newPage: number): void {
-    if (newPage > 0 && newPage <= Math.ceil(this.total / this.itemsPerPage)) {
-      this.currentPage = newPage;
-      this.loadProducts();
-    }
+    this.totalPage$.pipe(take(1)).subscribe((x) => {
+      if (newPage > 0 && newPage <= x) {
+        this.currentPage = newPage;
+        this.loadProducts();
+      }
+    });
   }
 
   changeLimit(): void {
