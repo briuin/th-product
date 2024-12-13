@@ -37,6 +37,12 @@
     <label class="text-sm font-medium">Sort by:</label>
     <button
       class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+      (click)="applySort('name')"
+    >
+      Name {{ sortBy === 'name' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}
+    </button>
+    <button
+      class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
       (click)="applySort('price')"
     >
       Price {{ sortBy === 'price' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}
@@ -67,6 +73,37 @@
           View
         </button>
       </div>
+    </div>
+  </div>
+
+  <div class="flex justify-between items-center mt-4">
+    <div>
+      <label for="limit" class="text-sm font-medium">Items per page:</label>
+      <select
+        id="limit"
+        [(ngModel)]="itemsPerPage"
+        (change)="changeLimit()"
+        class="border rounded-md px-2 py-1"
+      >
+        <option *ngFor="let l of limitOptions" [value]="l">{{ l }}</option>
+      </select>
+    </div>
+    <div class="flex items-center space-x-4">
+      <button
+        class="px-4 py-2 bg-gray-300 rounded-md"
+        [disabled]="currentPage === 1"
+        (click)="changePage(currentPage - 1)"
+      >
+        Previous
+      </button>
+      <span>Page {{ currentPage }} of {{ totalPage }}</span>
+      <button
+        class="px-4 py-2 bg-gray-300 rounded-md"
+        [disabled]="currentPage === totalPage"
+        (click)="changePage(currentPage + 1)"
+      >
+        Next
+      </button>
     </div>
   </div>
 </div>

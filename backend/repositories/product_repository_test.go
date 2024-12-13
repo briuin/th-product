@@ -25,8 +25,9 @@ func TestFindAll(t *testing.T) {
 	db.Create(&models.Product{Name: "Test Product 2", Price: 200})
 
 	// Test FindAll
-	products, err := repo.FindAll("", "", "")
+	products, total, err := repo.FindAll(models.ProductQuery{})
 	assert.NoError(t, err)
+	assert.Equal(t, total, 2)
 	assert.Len(t, products, 2)
 }
 

@@ -19,9 +19,9 @@ type MockProductService struct {
 	mock.Mock
 }
 
-func (m *MockProductService) GetAllProducts(name string, sortBy string, sortDirection string) ([]models.Product, error) {
+func (m *MockProductService) GetAllProducts(query models.ProductQuery) ([]models.Product, int64, error) {
 	args := m.Called()
-	return args.Get(0).([]models.Product), args.Error(1)
+	return args.Get(0).([]models.Product), int64(args.Int(1)), args.Error(2)
 }
 
 func (m *MockProductService) GetProductByID(id uint) (models.Product, error) {

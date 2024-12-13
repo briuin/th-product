@@ -14,9 +14,9 @@ type MockProductRepository struct {
 	mock.Mock
 }
 
-func (m *MockProductRepository) FindAll(name string, sortBy string, sortDirection string) ([]models.Product, error) {
+func (m *MockProductRepository) FindAll(query models.ProductQuery) ([]models.Product, int64, error) {
 	args := m.Called()
-	return args.Get(0).([]models.Product), args.Error(1)
+	return args.Get(0).([]models.Product), int64(args.Int(1)), args.Error(2)
 }
 
 func (m *MockProductRepository) FindById(id uint) (models.Product, error) {
@@ -51,8 +51,9 @@ func TestGetAllProducts(t *testing.T) {
 	mockRepo.On("FindAll").Return(mockProducts, nil)
 
 	// Test service
-	products, err := service.GetAllProducts("", "", "")
+	products, total, err := service.GetAllProducts(models.ProductQuery{})
 	assert.NoError(t, err)
+	assert.Equal(t, total, 2)
 	assert.Equal(t, 2, len(products))
 }
 

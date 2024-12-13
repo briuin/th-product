@@ -15,20 +15,23 @@ func NewProductRepositoryPostgre(Db *gorm.DB) ProductRepository {
 	return &ProductRepositoryPostgre{Db: Db}
 }
 
-func (t ProductRepositoryPostgre) FindAll(name string, sortBy string, sortDirection string) (products []models.Product, err error) {
-	if sortDirection != "asc" && sortDirection != "desc" {
-		sortDirection = "asc"
+func (t ProductRepositoryPostgre) FindAll(query models.ProductQuery) (products []models.Product, total int64, err error) {
+	var count int64
+	dbQuery := t.Db.Model(&models.Product{})
+	if query.SearchText != "" {
+		dbQuery = dbQuery.Where("name LIKE ?", "%"+query.SearchText+"%")
 	}
-	query := t.Db.Model(&models.Product{}).Order(sortBy + " " + sortDirection)
-	if name != "" {
-		query = query.Where("name LIKE ?", "%"+name+"%")
-	}
-	results := query.Find(&products)
-	if results.Error != nil {
-		return nil, results.Error
+	if err := dbQuery.Count(&count).Error; err != nil {
+		return nil, 0, err
 	}
 
-	return products, nil
+	dbQuery = dbQuery.Offset(query.Offset).Limit(query.Limit).Order(query.SortBy + " " + query.SortDirection)
+	result := dbQuery.Find(&products)
+	if result.Error != nil {
+		return nil, 0, result.Error
+	}
+
+	return products, count, nil
 }
 
 func (t ProductRepositoryPostgre) FindById(productId uint) (product models.Product, err error) {

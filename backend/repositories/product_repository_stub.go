@@ -14,7 +14,7 @@ func NewProductRepositoryStub(Db *gorm.DB) ProductRepository {
 	return &ProductRepositoryStub{Db: Db}
 }
 
-func (t ProductRepositoryStub) FindAll(name string, sortBy string, sortDirection string) (products []models.Product, err error) {
+func (t ProductRepositoryStub) FindAll(query models.ProductQuery) (products []models.Product, total int64, err error) {
 	var result []models.Product = []models.Product{
 		{ID: 1, Name: "Laptop", Type: "Electronics", Picture: "laptop.jpg", Price: 999.99, Description: "High-performance laptop"},
 		{ID: 2, Name: "Table", Type: "Furniture", Picture: "table.jpg", Price: 199.99, Description: "Wooden dining table"},
@@ -23,7 +23,7 @@ func (t ProductRepositoryStub) FindAll(name string, sortBy string, sortDirection
 		{ID: 5, Name: "Laptop 3", Type: "Electronics", Picture: "laptop.jpg", Price: 999.99, Description: "High-performance laptop"},
 		{ID: 6, Name: "Table 3", Type: "Furniture", Picture: "table.jpg", Price: 199.99, Description: "Wooden dining table"},
 	}
-	return result, nil
+	return result, 6, nil
 }
 
 func (t ProductRepositoryStub) FindById(productId uint) (task models.Product, err error) {
