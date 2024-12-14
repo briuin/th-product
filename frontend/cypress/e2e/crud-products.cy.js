@@ -42,7 +42,7 @@ describe('CRUD Products End-to-End', () => {
   
     it('Should list products', () => {
       // Verify that the product list is displayed
-      cy.get('.product-item').should('have.length.greaterThan', 0);
+      cy.get('[data-spec="product-item"]').should('have.length.greaterThan', 0);
     });
   });
   

@@ -20,10 +20,10 @@ export class ProductListComponent {
   apiUrl = environment.apiUrl;
   searchQuery: string = '';
   currentPage: number = 1;
-  itemsPerPage: number = 1;
+  itemsPerPage: number = 2;
   sortBy: string = '';
   sortDirection: string = '';
-  limitOptions: number[] = [1, 5, 10, 20, 50];
+  limitOptions: number[] = [2, 6, 10, 20, 50];
   products$!: Observable<Product[]>;
   total$!: Observable<number>;
   totalPage$!: Observable<number>;

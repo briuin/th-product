@@ -61,11 +61,14 @@ describe('Product List Functionalities', () => {
     });
   
     it('Should change the number of items per page', () => {
-      // Change items per page to 20
-      cy.get('[data-spec="items-per-page"]').select('20');
+      cy.intercept('/products/*').as('getProducts')
+      // Change items per page to 6
+      cy.get('[data-spec="items-per-page"]').select('6');
   
-      // Verify that up to 20 products are displayed
-      cy.get('[data-spec="product-item"]').should('have.length.lte', 20);
+      cy.wait('@getProducts').then((interception) => {
+        cy.get('[data-spec="product-item"]').should('have.length.lte', 6);
+      })
+      
     });
   });
   
