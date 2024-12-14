@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { ProductPageComponent } from './pages/product-page/product-page.component';
 
 export const routes: Routes = [
-  { path: '', component: ProductListComponent, pathMatch: 'full' },
+  { path: '', component: ProductPageComponent, pathMatch: 'full' },
   { path: 'product/:id', component: ProductDetailComponent },
 ];

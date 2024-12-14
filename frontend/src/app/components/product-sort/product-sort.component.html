@@ -1,0 +1,14 @@
+<div class="mb-6 flex items-center gap-4">
+  <label class="text-sm font-medium">Sort by:</label>
+  <button
+    [attr.data-spec]="'sort-' + field + '-button'"
+    *ngFor="let field of sortFields"
+    [class.bg-blue-500]="sortBy === field"
+    [class.bg-gray-300]="sortBy !== field"
+    class="px-4 py-2 text-white rounded-lg hover:bg-blue-600"
+    (click)="applySort(field)"
+  >
+    {{ field.charAt(0).toUpperCase() + field.slice(1) }}
+    {{ sortBy === field ? (sortDirection === "asc" ? "↑" : "↓") : "" }}
+  </button>
+</div>

@@ -1,0 +1,43 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">Product Management</h1>
+  <div class="flex justify-between items-center mb-4">
+    <button
+      data-spec="open-create-product-button"
+      class="bg-blue-500 text-white px-4 py-2 rounded-lg"
+      (click)="openAddProductModal()"
+    >
+      Add Product
+    </button>
+  </div>
+
+  <app-product-filter
+    (search)="applyFilter($event)"
+    (reset)="resetFilter()"
+  ></app-product-filter>
+
+  <app-product-sort
+    [sortBy]="sortBy"
+    [sortDirection]="sortDirection"
+    [sortFields]="['name', 'price', 'type']"
+    (sort)="applySort($event)"
+  ></app-product-sort>
+
+  <app-product-list
+    [products]="(products$ | async)!"
+    [apiUrl]="apiUrl"
+  ></app-product-list>
+
+  <app-pagination
+    [itemsPerPage]="itemsPerPage"
+    [limitOptions]="limitOptions"
+    [currentPage]="currentPage"
+    [totalPages]="(totalPage$ | async)!"
+    (pageChange)="changePage($event)"
+    (limitChange)="changeLimit($event)"
+  ></app-pagination>
+
+  <app-add-product-modal
+    *ngIf="showAddModal"
+    (onClose)="closeAddProductModal()"
+  ></app-add-product-modal>
+</div>

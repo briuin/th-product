@@ -1,0 +1,43 @@
+<div class="flex justify-between items-center mt-4">
+    <div>
+      <label for="limit" class="text-sm font-medium">Items per page:</label>
+      <select
+        data-spec="items-per-page"
+        id="limit"
+        [(ngModel)]="itemsPerPage"
+        (change)="changeLimit()"
+        class="border rounded-md px-2 py-1"
+      >
+        <option *ngFor="let l of limitOptions" [value]="l">{{ l }}</option>
+      </select>
+    </div>
+    <div class="flex items-center space-x-4">
+      <button
+        data-spec="prev-page-button"
+        class="px-4 py-2 rounded-md"
+        [ngClass]="{
+          'bg-gray-300 cursor-not-allowed': currentPage === 1,
+          'bg-blue-500 text-white hover:bg-blue-600': currentPage > 1
+        }"
+        [disabled]="currentPage === 1"
+        (click)="changePage(currentPage - 1)"
+      >
+        Previous
+      </button>
+      <span data-spec="pagination-info"
+        >Page {{ currentPage }} of {{ totalPages }}</span
+      >
+      <button
+        data-spec="next-page-button"
+        class="px-4 py-2 rounded-md"
+        [ngClass]="{
+          'bg-gray-300 cursor-not-allowed': currentPage === totalPages,
+          'bg-blue-500 text-white hover:bg-blue-600': currentPage < totalPages
+        }"
+        [disabled]="currentPage === totalPages"
+        (click)="changePage(currentPage + 1)"
+      >
+        Next
+      </button>
+    </div>
+  </div>

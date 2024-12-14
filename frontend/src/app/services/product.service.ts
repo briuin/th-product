@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Product } from '../models/product.model';
 import { environment } from '../../environments/environment';
 import { QueryParams } from '../models/query-params.model';
+import { GetProductListResponse } from '../models/get-product-list-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class ProductService {
 
   getProducts(
     queryParams: QueryParams
-  ): Observable<Product[]> {
+  ): Observable<GetProductListResponse> {
     let params = new HttpParams();
     if (queryParams.searchText) {
         params = params.set('name', queryParams.searchText);
@@ -32,7 +33,7 @@ export class ProductService {
       if (queryParams.perPage) {
         params = params.set('perPage', queryParams.perPage.toString());
       }
-    return this.http.get<Product[]>(this.apiUrl, { params });
+    return this.http.get<GetProductListResponse>(this.apiUrl, { params });
   }
 
   getProductById(id: number): Observable<Product> {

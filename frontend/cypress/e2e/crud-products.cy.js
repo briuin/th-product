@@ -29,7 +29,7 @@ describe('CRUD Products End-to-End', () => {
   
     it('Should update an existing product', () => {
       // Click on a product to view details
-      cy.get('[data-spec="view-product-detail-button"]').click();
+      cy.get('[data-spec="view-product-detail-button"]').first().click();
       cy.get('[data-spec="product-detail-edit-button"]').click();
   
       // Edit the product
