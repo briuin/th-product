@@ -14,18 +14,21 @@
     <h2 class="text-lg font-semibold mb-2">Filter by Name</h2>
     <div class="flex items-center gap-4">
       <input
+        data-spec="search-input"
         type="text"
         [(ngModel)]="searchQuery"
         class="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
         placeholder="Enter product name"
       />
       <button
+        data-spec="search-button"
         class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
         (click)="applyFilter()"
       >
         Apply
       </button>
       <button
+        data-spec="search-reset-button"
         class="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
         (click)="resetFilter()"
       >
@@ -37,12 +40,14 @@
   <div class="mb-6 flex items-center gap-4">
     <label class="text-sm font-medium">Sort by:</label>
     <button
+      data-spec="sort-name-button"
       class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
       (click)="applySort('name')"
     >
       Name {{ sortBy === "name" ? (sortDirection === "asc" ? "↑" : "↓") : "" }}
     </button>
     <button
+      data-spec="sort-price-button"
       class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
       (click)="applySort('price')"
     >
@@ -50,6 +55,7 @@
       {{ sortBy === "price" ? (sortDirection === "asc" ? "↑" : "↓") : "" }}
     </button>
     <button
+      data-spec="sort-type-button"
       class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
       (click)="applySort('type')"
     >
@@ -67,11 +73,19 @@
         alt="{{ product.name }}"
         class="h-40 w-full object-cover rounded-md"
       />
-      <h2 class="text-lg font-bold mt-2">{{ product.name }}</h2>
-      <p class="text-gray-600">{{ product.type }}</p>
-      <p class="text-gray-800 font-semibold">${{ product.price }}</p>
+      <h2 data-spec="product-name" class="text-lg font-bold mt-2">
+        {{ product.name }}
+      </h2>
+      <p data-spec="product-type" class="text-gray-600">{{ product.type }}</p>
+      <p data-spec="product-price" class="text-gray-800 font-semibold">
+        ${{ product.price }}
+      </p>
       <div class="flex justify-between items-center mt-4">
-        <button data-spec="view-product-detail-button" class="text-blue-500" [routerLink]="['/product', product.id]">
+        <button
+          data-spec="view-product-detail-button"
+          class="text-blue-500"
+          [routerLink]="['/product', product.id]"
+        >
           View
         </button>
       </div>
@@ -82,6 +96,7 @@
     <div>
       <label for="limit" class="text-sm font-medium">Items per page:</label>
       <select
+        data-spec="items-per-page"
         id="limit"
         [(ngModel)]="itemsPerPage"
         (change)="changeLimit()"
@@ -92,6 +107,7 @@
     </div>
     <div class="flex items-center space-x-4">
       <button
+        data-spec="prev-page-button"
         class="px-4 py-2 rounded-md"
         [ngClass]="{
           'bg-gray-300 cursor-not-allowed': currentPage === 1,
@@ -102,8 +118,11 @@
       >
         Previous
       </button>
-      <span>Page {{ currentPage }} of {{ totalPage$ | async }}</span>
+      <span data-spec="pagination-info"
+        >Page {{ currentPage }} of {{ totalPage$ | async }}</span
+      >
       <button
+        data-spec="next-page-button"
         class="px-4 py-2 rounded-md"
         [ngClass]="{
           'bg-gray-300 cursor-not-allowed':
