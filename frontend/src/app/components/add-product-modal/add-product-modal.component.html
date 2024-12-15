@@ -62,10 +62,10 @@
           (change)="onFileSelected($event)"
           class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
         />
-        <div *ngIf="isUploading" class="text-blue-500 mt-2">Uploading...</div>
+        <div *ngIf="isUploading$ | async" class="text-blue-500 mt-2">Uploading...</div>
         <img
-          *ngIf="uploadedImageUrl"
-          [src]="uploadedImageUrl"
+          *ngIf="uploadedImageUrl$ | async"
+          [src]="apiUrl + (uploadedImageUrl$ | async)"
           alt="Uploaded"
           class="mt-2 w-32 h-32 object-cover rounded"
         />

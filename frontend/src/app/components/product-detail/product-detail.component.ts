@@ -6,10 +6,16 @@ import { FormsModule } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { Product } from '../../models/product.model';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { selectIsUploading, selectUploadedImageUrl } from 'src/app/store/upload.selector';
+import { Observable, take } from 'rxjs';
+import {
+  selectIsUploading,
+  selectUploadedImageUrl,
+} from 'src/app/store/upload.selector';
 import { ProductActions } from 'src/app/store/product.actions';
-import { selectCurrentProduct, selectIsSaving } from 'src/app/store/product.selectors';
+import {
+  selectCurrentProduct,
+  selectIsSaving,
+} from 'src/app/store/product.selectors';
 import { UploadActions } from 'src/app/store/upload.actions';
 import { UiInputComponent } from 'src/app/ui/ui-input.component';
 
@@ -29,10 +35,13 @@ export class ProductDetailComponent implements OnInit {
     private store: Store
   ) {}
 
-  product$: Observable<Product | null> = this.store.select(selectCurrentProduct);
+  product$: Observable<Product | null> =
+    this.store.select(selectCurrentProduct);
   isUploading$: Observable<boolean> = this.store.select(selectIsUploading);
   isSaving$: Observable<boolean> = this.store.select(selectIsSaving);
-  uploadedImageUrl$: Observable<string | null> = this.store.select(selectUploadedImageUrl);
+  uploadedImageUrl$: Observable<string | null> = this.store.select(
+    selectUploadedImageUrl
+  );
 
   isEditing: boolean = false;
   editableProduct!: Product;
@@ -40,7 +49,9 @@ export class ProductDetailComponent implements OnInit {
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
     if (productId) {
-      this.store.dispatch(ProductActions.loadProduct({ id: parseInt(productId, 10) }));
+      this.store.dispatch(
+        ProductActions.loadProduct({ id: parseInt(productId, 10) })
+      );
     }
 
     this.product$.subscribe((product) => {
@@ -53,7 +64,7 @@ export class ProductDetailComponent implements OnInit {
   toggleEdit(): void {
     this.isEditing = !this.isEditing;
     if (!this.isEditing) {
-      this.editableProduct = null as any; 
+      this.editableProduct = null as any;
     }
   }
 
@@ -62,12 +73,20 @@ export class ProductDetailComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.store.dispatch(UploadActions.uploadImage({ file }));
+
+      this.uploadedImageUrl$.subscribe((url) => {
+        if (url) {
+          this.editableProduct.picture = url;
+        }
+      });
     }
   }
 
   saveProduct(product: Product): void {
     if (this.editableProduct) {
-      this.store.dispatch(ProductActions.updateProduct({ product: this.editableProduct }));
+      this.store.dispatch(
+        ProductActions.updateProduct({ product: this.editableProduct })
+      );
       this.isEditing = false;
     }
   }
@@ -79,7 +98,6 @@ export class ProductDetailComponent implements OnInit {
         this.editableProduct = { ...product };
       }
     });
-
   }
 
   navigateBackToList(): void {

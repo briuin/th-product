@@ -7,6 +7,7 @@ import { UploadActions } from 'src/app/store/upload.actions';
 import { selectIsUploading, selectUploadedImageUrl } from 'src/app/store/upload.selector';
 import { Store } from '@ngrx/store';
 import { ProductActions } from 'src/app/store/product.actions';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-product-modal',
@@ -17,9 +18,7 @@ import { ProductActions } from 'src/app/store/product.actions';
 })
 export class AddProductModalComponent {
   @Output() onClose = new EventEmitter<void>();
-
-  uploadedImageUrl = '';
-  isUploading = false;
+  apiUrl = environment.apiUrl;
 
   product = {
     name: '',

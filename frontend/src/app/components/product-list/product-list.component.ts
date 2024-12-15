@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Product } from '../../models/product.model';
 import { RouterModule } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-product-list',
@@ -12,7 +13,7 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent {
-  @Input() apiUrl!: string;
   @Input() products: Product[] = [];
+  apiUrl = environment.apiUrl;
 
 }
