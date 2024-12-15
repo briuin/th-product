@@ -1,0 +1,11 @@
+.ui-input-wrapper {
+    width: 100%; /* Ensures full width by default */
+  
+    input {
+      width: 100%; /* Force the input to take full width of its container */
+      min-height: 2.5rem; /* Set a default height */
+      padding: 0.5rem; /* Add padding for better usability */
+      box-sizing: border-box; /* Ensure padding doesn’t affect dimensions */
+    }
+  }
+  

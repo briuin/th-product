@@ -8,6 +8,7 @@ describe('CRUD Products End-to-End', () => {
     });
   
     it('Should create a new product', () => {
+      cy.intercept('/products/*').as('getProducts')
       cy.get('[data-spec="open-create-product-button"]').click();
   
       // Fill the form
@@ -23,8 +24,10 @@ describe('CRUD Products End-to-End', () => {
       // Submit the form
       cy.get('[data-spec="create-product-button-save"]').click();
   
-      // Verify the product is added
-      cy.contains('Test Product').should('be.visible');
+      cy.wait('@getProducts').then((interception) => {
+        cy.contains('Test Product').should('be.visible');
+      })
+     
     });
   
     it('Should update an existing product', () => {

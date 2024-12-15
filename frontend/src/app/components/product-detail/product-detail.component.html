@@ -43,14 +43,13 @@
       <p *ngIf="!isEditing" class="mt-1 text-lg font-semibold text-gray-900">
         {{ product.name }}
       </p>
-      <input
-        data-spec="product-detail-name"
+      <app-ui-input
+        [dataSpec]="'product-detail-name'"
         *ngIf="isEditing"
         type="text"
-        [(ngModel)]="editableProduct.name"
-        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+        [(value)]="editableProduct.name"
         placeholder="Enter product name"
-      />
+      ></app-ui-input>
     </div>
 
     <!-- Product Type -->
@@ -59,14 +58,14 @@
       <p *ngIf="!isEditing" class="mt-1 text-lg font-semibold text-gray-900">
         {{ product.type }}
       </p>
-      <input
-        data-spec="product-detail-type"
+
+      <app-ui-input
+        [dataSpec]="'product-detail-type'"
         *ngIf="isEditing"
         type="text"
-        [(ngModel)]="editableProduct.type"
-        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+        [(value)]="editableProduct.type"
         placeholder="Enter product type"
-      />
+      ></app-ui-input>
     </div>
 
     <!-- Product Price -->
@@ -75,14 +74,13 @@
       <p *ngIf="!isEditing" class="mt-1 text-lg font-semibold text-gray-900">
         ${{ product.price }}
       </p>
-      <input
-        data-spec="product-detail-price"
+      <app-ui-input
+        [dataSpec]="'product-detail-price'"
         *ngIf="isEditing"
         type="number"
-        [(ngModel)]="editableProduct.price"
-        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+        [(value)]="editableProduct.price"
         placeholder="Enter product price"
-      />
+      ></app-ui-input>
     </div>
 
     <!-- Product Description -->

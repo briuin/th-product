@@ -1,26 +1,27 @@
 <div class="mb-6 p-4 border rounded-md shadow-md">
-    <h2 class="text-lg font-semibold mb-2">Filter by Name</h2>
-    <div class="flex items-center gap-4">
-      <input
-        data-spec="search-input"
-        type="text"
-        [(ngModel)]="searchQuery"
-        class="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-        placeholder="Enter product name"
-      />
-      <button
-        data-spec="search-button"
-        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-        (click)="onSearch()"
-      >
-        Apply
-      </button>
-      <button
-        data-spec="search-reset-button"
-        class="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
-        (click)="onReset()"
-      >
-        Reset
-      </button>
-    </div>
+  <h2 class="text-lg font-semibold mb-2">Filter by Name</h2>
+  <div class="flex items-center gap-4">
+    <app-ui-input
+      class="w-full"
+      dataSpec="search-input"
+      type="text"
+      [(value)]="searchQuery"
+      placeholder="Enter product name"
+    ></app-ui-input>
+
+    <button
+      data-spec="search-button"
+      class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+      (click)="onSearch()"
+    >
+      Apply
+    </button>
+    <button
+      data-spec="search-reset-button"
+      class="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
+      (click)="onReset()"
+    >
+      Reset
+    </button>
   </div>
+</div>

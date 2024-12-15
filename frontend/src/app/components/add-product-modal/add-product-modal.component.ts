@@ -1,22 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UploadService } from '../../services/upload.service';
-import { ProductService } from '../../services/product.service';
-import { tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { Observable, tap } from 'rxjs';
+import { UiInputComponent } from 'src/app/ui/ui-input.component';
+import { UploadActions } from 'src/app/store/upload.actions';
+import { selectIsUploading, selectUploadedImageUrl } from 'src/app/store/upload.selector';
+import { Store } from '@ngrx/store';
+import { ProductActions } from 'src/app/store/product.actions';
 
 @Component({
   selector: 'app-add-product-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, UiInputComponent],
   templateUrl: './add-product-modal.component.html',
   styleUrls: ['./add-product-modal.component.scss'],
 })
 export class AddProductModalComponent {
   @Output() onClose = new EventEmitter<void>();
 
-  private apiUrl = `${environment.apiUrl}`;
   uploadedImageUrl = '';
   isUploading = false;
 
@@ -28,20 +29,20 @@ export class AddProductModalComponent {
     picture: '',
   };
 
-  constructor(
-    private uploadService: UploadService,
-    private productService: ProductService
-  ) {}
+  isUploading$: Observable<boolean> = this.store.select(selectIsUploading);
+  uploadedImageUrl$: Observable<string | null> = this.store.select(selectUploadedImageUrl);
+
+  constructor(private store: Store) {}
 
   saveProduct(): void {
     if (!this.product.name || !this.product.type || this.product.price <= 0) {
       alert('Please fill in all required fields.');
       return;
     }
-    this.productService
-      .createProduct(this.product)
-      .pipe(tap(() => this.closeModal()))
-      .subscribe();
+
+    this.store.dispatch(ProductActions.createProduct({ product: this.product }));
+
+    this.closeModal();
   }
 
   closeModal(): void {
@@ -53,17 +54,11 @@ export class AddProductModalComponent {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
 
-      this.isUploading = true;
-      this.uploadService.uploadImage(file).subscribe({
-        next: (response) => {
-          this.uploadedImageUrl = `${this.apiUrl}${response.url}`;
-          this.product.picture = response.url; 
-          this.isUploading = false;
-        },
-        error: (err) => {
-          console.error('Upload failed', err);
-          this.isUploading = false;
-        },
+      this.store.dispatch(UploadActions.uploadImage({ file }));
+      this.uploadedImageUrl$.subscribe((url) => {
+        if (url) {
+          this.product.picture = url;
+        }
       });
     }
   }

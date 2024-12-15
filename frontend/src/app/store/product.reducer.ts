@@ -45,5 +45,12 @@ export const productReducer = createReducer(
   on(ProductActions.updateProductFailure, (state) => ({
     ...state,
     isSaving: false,
+  })),
+  on(ProductActions.createProductSuccess, (state) => ({
+    ...state,
+  })),
+  on(ProductActions.createProductFailure, (state, { error }) => ({
+    ...state,
+    error,
   }))
 );

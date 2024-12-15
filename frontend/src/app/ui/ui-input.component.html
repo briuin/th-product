@@ -1,0 +1,11 @@
+<div class="ui-input-wrapper w-full">
+  <input
+    [attr.data-spec]="dataSpec"
+    [type]="type"
+    [placeholder]="placeholder"
+    [ngModel]="value"
+    (ngModelChange)="onValueChange($event)"
+    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+    [ngClass]="customClass"
+  />
+</div>

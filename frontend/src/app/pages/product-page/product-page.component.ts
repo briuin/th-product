@@ -54,20 +54,6 @@ export class ProductPageComponent {
       });
   }
 
-  applyFilter(searchQuery: string): void {
-    this.store.dispatch(
-      ProductActions.updateQueryParams({ queryParams: { searchText: searchQuery } })
-    );
-    this.loadProducts();
-  }
-
-  resetFilter(): void {
-    this.store.dispatch(
-      ProductActions.updateQueryParams({ queryParams: { searchText: '' } })
-    );
-    this.loadProducts();
-  }
-
   changePage(newPage: number): void {
     this.store.dispatch(
       ProductActions.updateQueryParams({ queryParams: { page: newPage } })
@@ -88,5 +74,6 @@ export class ProductPageComponent {
 
   closeAddProductModal(): void {
     this.store.dispatch(ProductActions.toggleAddModal({ showAddModal: false }));
+    this.loadProducts();
   }
 }

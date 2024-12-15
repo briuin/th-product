@@ -4,12 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ProductActions } from 'src/app/store/product.actions';
 import { selectQueryParams } from 'src/app/store/product.selectors';
+import { UiInputComponent } from 'src/app/ui/ui-input.component';
 
 @Component({
   selector: 'app-product-filter',
   templateUrl: './product-filter.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, UiInputComponent],
 })
 export class ProductFilterComponent {
   searchQuery = '';

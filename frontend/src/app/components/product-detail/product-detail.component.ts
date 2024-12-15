@@ -11,11 +11,12 @@ import { selectIsUploading, selectUploadedImageUrl } from 'src/app/store/upload.
 import { ProductActions } from 'src/app/store/product.actions';
 import { selectCurrentProduct, selectIsSaving } from 'src/app/store/product.selectors';
 import { UploadActions } from 'src/app/store/upload.actions';
+import { UiInputComponent } from 'src/app/ui/ui-input.component';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, UiInputComponent],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
 })
@@ -25,7 +26,6 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private uploadService: UploadService,
     private store: Store
   ) {}
 
