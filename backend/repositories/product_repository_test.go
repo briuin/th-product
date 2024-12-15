@@ -24,10 +24,19 @@ func TestFindAll(t *testing.T) {
 	db.Create(&models.Product{Name: "Test Product 1", Price: 100})
 	db.Create(&models.Product{Name: "Test Product 2", Price: 200})
 
+	// Explicitly set pagination and sorting
+	query := models.ProductQuery{
+		Page:          1,
+		PerPage:       10,   // Set PerPage explicitly
+		SortBy:        "id", // Ensure it matches a valid column
+		SortDirection: "asc",
+	}
+
 	// Test FindAll
-	products, total, err := repo.FindAll(models.ProductQuery{})
+	products, total, err := repo.FindAll(query)
+
 	assert.NoError(t, err)
-	assert.Equal(t, total, 2)
+	assert.Equal(t, int64(2), total)
 	assert.Len(t, products, 2)
 }
 

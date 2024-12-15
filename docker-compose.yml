@@ -21,6 +21,15 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: golang_backend
+    restart: on-failure
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
+      DB_PORT: 5432
+      DB_SSLMODE: disable
+      DB_TIMEZONE: Asia/Shanghai
     ports:
       - "8080:8080"
     depends_on:

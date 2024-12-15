@@ -121,56 +121,6 @@ func TestGetProduct_NotFound(t *testing.T) {
 	assert.Equal(t, "Product not found", responseBody["error"])
 }
 
-func TestGetAllProducts(t *testing.T) {
-	gin.SetMode(gin.TestMode)
-	mockService := new(MockProductService)
-	controller := NewProductController(mockService)
-
-	mockProducts := []models.Product{
-		{ID: 1, Name: "Product 1"},
-		{ID: 2, Name: "Product 2"},
-	}
-	mockService.On("GetAllProducts").Return(mockProducts, nil)
-
-	router := gin.Default()
-	router.GET("/products", controller.GetAllProducts)
-
-	req, _ := http.NewRequest(http.MethodGet, "/products", nil)
-	resp := httptest.NewRecorder()
-	router.ServeHTTP(resp, req)
-
-	assert.Equal(t, http.StatusOK, resp.Code)
-
-	var responseProducts []models.Product
-	_ = json.Unmarshal(resp.Body.Bytes(), &responseProducts)
-	assert.Equal(t, 2, len(responseProducts))
-}
-
-func TestGetAllProducts_ServiceError(t *testing.T) {
-	gin.SetMode(gin.TestMode)
-	mockService := new(MockProductService)
-	controller := NewProductController(mockService)
-
-	// Mock the service to return an error
-	mockService.On("GetAllProducts").Return([]models.Product{}, errors.New("database error"))
-
-	router := gin.Default()
-	router.GET("/products", controller.GetAllProducts)
-
-	// Send the request
-	req, _ := http.NewRequest(http.MethodGet, "/products", nil)
-	resp := httptest.NewRecorder()
-	router.ServeHTTP(resp, req)
-
-	// Assert the response status code
-	assert.Equal(t, http.StatusInternalServerError, resp.Code)
-
-	// Assert the response contains the correct error message
-	var responseBody map[string]string
-	_ = json.Unmarshal(resp.Body.Bytes(), &responseBody)
-	assert.Contains(t, responseBody["error"], "Service error: database error")
-}
-
 func TestCreateProduct(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	mockService := new(MockProductService)

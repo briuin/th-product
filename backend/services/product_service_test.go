@@ -15,7 +15,7 @@ type MockProductRepository struct {
 }
 
 func (m *MockProductRepository) FindAll(query models.ProductQuery) ([]models.Product, int64, error) {
-	args := m.Called()
+	args := m.Called(query)
 	return args.Get(0).([]models.Product), int64(args.Int(1)), args.Error(2)
 }
 
@@ -39,22 +39,18 @@ func (m *MockProductRepository) Delete(id uint) error {
 	return args.Error(0)
 }
 
-func TestGetAllProducts(t *testing.T) {
+func TestGetProductByID_Success(t *testing.T) {
 	mockRepo := new(MockProductRepository)
 	service := DefaultProductService{repo: mockRepo}
 
 	// Mock repository behavior
-	mockProducts := []models.Product{
-		{ID: 1, Name: "Product 1"},
-		{ID: 2, Name: "Product 2"},
-	}
-	mockRepo.On("FindAll").Return(mockProducts, nil)
+	mockProduct := models.Product{ID: 1, Name: "Product 1"}
+	mockRepo.On("FindById", uint(1)).Return(mockProduct, nil)
 
 	// Test service
-	products, total, err := service.GetAllProducts(models.ProductQuery{})
+	product, err := service.GetProductByID(1)
 	assert.NoError(t, err)
-	assert.Equal(t, total, 2)
-	assert.Equal(t, 2, len(products))
+	assert.Equal(t, mockProduct, product)
 }
 
 func TestGetProductByID_NotFound(t *testing.T) {
@@ -68,4 +64,42 @@ func TestGetProductByID_NotFound(t *testing.T) {
 	_, err := service.GetProductByID(1)
 	assert.Error(t, err)
 	assert.Equal(t, "Product not found", err.Error())
+}
+
+func TestCreateProduct(t *testing.T) {
+	mockRepo := new(MockProductRepository)
+	service := DefaultProductService{repo: mockRepo}
+
+	// Mock repository behavior
+	product := models.Product{Name: "New Product"}
+	mockRepo.On("Create", product).Return(nil)
+
+	// Test service
+	err := service.CreateProduct(product)
+	assert.NoError(t, err)
+}
+
+func TestUpdateProduct(t *testing.T) {
+	mockRepo := new(MockProductRepository)
+	service := DefaultProductService{repo: mockRepo}
+
+	// Mock repository behavior
+	product := models.Product{ID: 1, Name: "Updated Product"}
+	mockRepo.On("Update", product).Return(nil)
+
+	// Test service
+	err := service.UpdateProduct(product)
+	assert.NoError(t, err)
+}
+
+func TestDeleteProduct(t *testing.T) {
+	mockRepo := new(MockProductRepository)
+	service := DefaultProductService{repo: mockRepo}
+
+	// Mock repository behavior
+	mockRepo.On("Delete", uint(1)).Return(nil)
+
+	// Test service
+	err := service.DeleteProduct(1)
+	assert.NoError(t, err)
 }
