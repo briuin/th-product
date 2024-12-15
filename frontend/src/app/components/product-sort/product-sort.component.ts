@@ -1,20 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { PRODUCT_SORT_OPTIONS } from 'src/app/app.constant';
+import { ProductActions } from 'src/app/store/product.actions';
+import { selectQueryParams } from 'src/app/store/product.selectors';
 
 @Component({
   selector: 'app-product-sort',
   templateUrl: './product-sort.component.html',
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule],
 })
 export class ProductSortComponent {
-  @Input() sortBy = '';
-  @Input() sortDirection = 'asc';
-  @Input() sortFields: string[] = [];
-  @Output() sort = new EventEmitter<{ sortBy: string; sortDirection: string }>();
+    private store = inject(Store);
+    queryParams$: Observable<{ sortBy: string; sortDirection: string }> = this.store.select(selectQueryParams);
+    readonly sortFields: string[] = PRODUCT_SORT_OPTIONS;
 
-  applySort(field: string) {
-    const direction = this.sortBy === field && this.sortDirection === 'asc' ? 'desc' : 'asc';
-    this.sort.emit({ sortBy: field, sortDirection: direction });
-  }
+    applySort(field: string): void {
+      this.store.dispatch(ProductActions.updateSort({ sortBy: field }));
+    }
+  
 }

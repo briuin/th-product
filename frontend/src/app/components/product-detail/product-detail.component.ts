@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductService } from '../../services/product.service';
 import { UploadService } from '../../services/upload.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { Product } from '../../models/product.model';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectIsUploading, selectUploadedImageUrl } from 'src/app/store/upload.selector';
+import { ProductActions } from 'src/app/store/product.actions';
+import { selectCurrentProduct, selectIsSaving } from 'src/app/store/product.selectors';
+import { UploadActions } from 'src/app/store/upload.actions';
 
 @Component({
   selector: 'app-product-detail',
@@ -16,90 +21,65 @@ import { Product } from '../../models/product.model';
 })
 export class ProductDetailComponent implements OnInit {
   apiUrl = environment.apiUrl;
-  product!: Product;
-  isUploading: boolean = false;
-  isSaving: boolean = false;
-  isEditing: boolean = false;
-  uploadedImageUrl: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private productService: ProductService,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private store: Store
   ) {}
+
+  product$: Observable<Product | null> = this.store.select(selectCurrentProduct);
+  isUploading$: Observable<boolean> = this.store.select(selectIsUploading);
+  isSaving$: Observable<boolean> = this.store.select(selectIsSaving);
+  uploadedImageUrl$: Observable<string | null> = this.store.select(selectUploadedImageUrl);
+
+  isEditing: boolean = false;
+  editableProduct!: Product;
 
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
     if (productId) {
-      this.loadProduct(parseInt(productId, 10));
+      this.store.dispatch(ProductActions.loadProduct({ id: parseInt(productId, 10) }));
     }
-  }
 
-  loadProduct(id: number): void {
-    this.productService.getProductById(id).subscribe({
-      next: (product) => {
-        this.product = product;
-      },
-      error: (err) => {
-        console.error('Failed to load product:', err);
-        alert('Failed to load product details.');
-        this.router.navigate(['/']);
-      },
+    this.product$.subscribe((product) => {
+      if (product && !this.isEditing) {
+        this.editableProduct = { ...product };
+      }
     });
   }
 
   toggleEdit(): void {
     this.isEditing = !this.isEditing;
+    if (!this.isEditing) {
+      this.editableProduct = null as any; 
+    }
   }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-
-      this.isUploading = true;
-      this.uploadService.uploadImage(file).subscribe({
-        next: (response) => {
-          this.uploadedImageUrl = response.url;
-          this.isUploading = false;
-        },
-        error: (err) => {
-          console.error('Upload failed:', err);
-          this.isUploading = false;
-        },
-      });
+      this.store.dispatch(UploadActions.uploadImage({ file }));
     }
   }
 
-  saveProduct(): void {
-    if (!this.product.name || !this.product.type || this.product.price <= 0) {
-      alert('Please fill in all required fields.');
-      return;
+  saveProduct(product: Product): void {
+    if (this.editableProduct) {
+      this.store.dispatch(ProductActions.updateProduct({ product: this.editableProduct }));
+      this.isEditing = false;
     }
-
-    if (this.uploadedImageUrl) {
-      this.product.picture = this.uploadedImageUrl;
-    }
-
-    this.isSaving = true;
-    this.productService.updateProduct(this.product).subscribe({
-      next: () => {
-        alert('Product updated successfully!');
-        this.isSaving = false;
-        this.isEditing = false;
-      },
-      error: (err) => {
-        console.error('Error updating product:', err);
-        alert('Failed to update product.');
-        this.isSaving = false;
-      },
-    });
   }
 
-  cancelEdit(): void {
+  cancelEdit(productId: number): void {
     this.isEditing = false;
-    this.loadProduct(this.product.id!); 
+    this.product$.subscribe((product) => {
+      if (product) {
+        this.editableProduct = { ...product };
+      }
+    });
+
   }
 
   navigateBackToList(): void {

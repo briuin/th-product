@@ -1,9 +1,10 @@
 FROM node:18.20-alpine as build
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm install -g yarn --force
+RUN yarn
 COPY . .
-RUN npm run build
+RUN yarn build
 
 FROM nginx:alpine
 COPY --from=build /app/dist/product-management-frontend/browser /usr/share/nginx/html

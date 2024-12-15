@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { ProductActions } from 'src/app/store/product.actions';
+import { selectQueryParams } from 'src/app/store/product.selectors';
 
 @Component({
   selector: 'app-product-filter',
@@ -10,15 +13,21 @@ import { FormsModule } from '@angular/forms';
 })
 export class ProductFilterComponent {
   searchQuery = '';
-  @Output() search = new EventEmitter<string>();
-  @Output() reset = new EventEmitter<void>();
 
-  onSearch() {
-    this.search.emit(this.searchQuery);
+  constructor(private store: Store) {
+    this.store.select(selectQueryParams).subscribe((queryParams) => {
+      this.searchQuery = queryParams.searchText || '';
+    });
   }
 
-  onReset() {
+  onSearch(): void {
+    this.store.dispatch(
+      ProductActions.updateQueryParams({ queryParams: { searchText: this.searchQuery } })
+    );
+  }
+
+  onReset(): void {
     this.searchQuery = '';
-    this.reset.emit();
+    this.store.dispatch(ProductActions.updateQueryParams({ queryParams: { searchText: '' } }));
   }
 }

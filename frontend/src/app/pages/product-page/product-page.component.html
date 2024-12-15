@@ -15,29 +15,21 @@
     (reset)="resetFilter()"
   ></app-product-filter>
 
-  <app-product-sort
-    [sortBy]="sortBy"
-    [sortDirection]="sortDirection"
-    [sortFields]="['name', 'price', 'type']"
-    (sort)="applySort($event)"
-  ></app-product-sort>
+  <app-product-sort></app-product-sort>
 
-  <app-product-list
-    [products]="(products$ | async)!"
-    [apiUrl]="apiUrl"
-  ></app-product-list>
+  <app-product-list [products]="(products$ | async)!"></app-product-list>
 
   <app-pagination
-    [itemsPerPage]="itemsPerPage"
-    [limitOptions]="limitOptions"
-    [currentPage]="currentPage"
+    [itemsPerPage]="(queryParams$ | async)?.perPage!"
     [totalPages]="(totalPage$ | async)!"
+    [currentPage]="(queryParams$ | async)?.page!"
     (pageChange)="changePage($event)"
     (limitChange)="changeLimit($event)"
+    [limitOptions]="limitOptions"
   ></app-pagination>
 
   <app-add-product-modal
-    *ngIf="showAddModal"
+    *ngIf="showAddModal$ | async"
     (onClose)="closeAddProductModal()"
   ></app-add-product-modal>
 </div>

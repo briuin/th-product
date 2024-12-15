@@ -1,102 +1,92 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AddProductModalComponent } from '../../components/add-product-modal/add-product-modal.component';
 import { Product } from '../../models/product.model';
-import { ProductService } from '../../services/product.service';
 import { RouterModule } from '@angular/router';
-import { environment } from '../../../environments/environment';
 import { QueryParams } from '../../models/query-params.model';
-import { map, Observable, shareReplay, take } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ProductListComponent } from 'src/app/components/product-list/product-list.component';
 import { ProductSortComponent } from 'src/app/components/product-sort/product-sort.component';
 import { ProductFilterComponent } from 'src/app/components/product-filter/product-filter.component';
 import { PaginationComponent } from 'src/app/components/pagination/pagination.component';
 import { SortOptions } from 'src/app/models/sort-options.model';
+import { Store } from '@ngrx/store';
+import { selectProducts, selectQueryParams, selectShowAddModal, selectTotal, selectTotalPages } from 'src/app/store/product.selectors';
+import { ProductActions } from 'src/app/store/product.actions';
+import { PRODUCT_PAGINATION_LIMIT_OPTIONS } from 'src/app/app.constant';
 
 @Component({
   selector: 'app-product-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddProductModalComponent, RouterModule, ProductListComponent, ProductSortComponent, ProductFilterComponent, PaginationComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AddProductModalComponent,
+    RouterModule,
+    ProductListComponent,
+    ProductSortComponent,
+    ProductFilterComponent,
+    PaginationComponent,
+  ],
   templateUrl: './product-page.component.html',
   styleUrls: ['./product-page.component.scss'],
 })
 export class ProductPageComponent {
-  apiUrl = environment.apiUrl;
-  searchQuery: string = '';
-  currentPage: number = 1;
-  itemsPerPage: number = 2;
-  sortBy: string = '';
-  sortDirection: string = '';
-  limitOptions: number[] = [2, 6, 10, 20, 50];
-  products$!: Observable<Product[]>;
-  total$!: Observable<number>;
-  totalPage$!: Observable<number>;
+  private store = inject(Store);
 
-  showAddModal = false;
+  products$: Observable<Product[]> = this.store.select(selectProducts);
+  total$: Observable<number> = this.store.select(selectTotal);
+  totalPage$: Observable<number> = this.store.select(selectTotalPages);
+  showAddModal$: Observable<boolean> = this.store.select(selectShowAddModal);
+  queryParams$: Observable<QueryParams> = this.store.select(selectQueryParams);
+  limitOptions: number[] = PRODUCT_PAGINATION_LIMIT_OPTIONS;
 
-  constructor(private productService: ProductService) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.loadProducts();
   }
 
   loadProducts(): void {
-    const queryParams: QueryParams = {
-      searchText: this.searchQuery,
-      sortBy: this.sortBy,
-      sortDirection: this.sortDirection,
-      page: this.currentPage,
-      perPage: this.itemsPerPage,
-    };
-
-    const response$ = this.productService.getProducts(queryParams).pipe(shareReplay(1));
-
-    this.products$ = response$.pipe(map((response) => response.data));
-    this.total$ = response$.pipe(map((response) => response.total));
-    this.totalPage$ = response$.pipe(map((response) => Math.ceil(response.total / this.itemsPerPage)));
+    this.store.select(selectQueryParams).subscribe((queryParams) => {
+        this.store.dispatch(ProductActions.loadProducts({ queryParams }));
+      });
   }
 
-  openAddProductModal(): void {
-    this.showAddModal = true;
-  }
-
-  closeAddProductModal(): void {
-    this.showAddModal = false;
-  }
-
-  applyFilter(searchQuery: string) {
-    this.searchQuery = searchQuery;
+  applyFilter(searchQuery: string): void {
+    this.store.dispatch(
+      ProductActions.updateQueryParams({ queryParams: { searchText: searchQuery } })
+    );
     this.loadProducts();
   }
 
-  resetFilter() {
-    this.searchQuery = '';
-    this.loadProducts();
-  }
-
-  applySort(options: SortOptions): void {
-    if (this.sortBy === options.sortBy) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortBy = options.sortBy;
-      this.sortDirection = 'asc';
-    }
+  resetFilter(): void {
+    this.store.dispatch(
+      ProductActions.updateQueryParams({ queryParams: { searchText: '' } })
+    );
     this.loadProducts();
   }
 
   changePage(newPage: number): void {
-    this.totalPage$.pipe(take(1)).subscribe((x) => {
-      if (newPage > 0 && newPage <= x) {
-        this.currentPage = newPage;
-        this.loadProducts();
-      }
-    });
+    this.store.dispatch(
+      ProductActions.updateQueryParams({ queryParams: { page: newPage } })
+    );
+    this.loadProducts();
   }
 
   changeLimit(limit: number): void {
-    this.currentPage = 1;
-    this.itemsPerPage = limit;
+    this.store.dispatch(
+      ProductActions.updateQueryParams({ queryParams: { perPage: limit, page: 1 } })
+    );
     this.loadProducts();
+  }
+
+  openAddProductModal(): void {
+    this.store.dispatch(ProductActions.toggleAddModal({ showAddModal: true }));
+  }
+
+  closeAddProductModal(): void {
+    this.store.dispatch(ProductActions.toggleAddModal({ showAddModal: false }));
   }
 }
