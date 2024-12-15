@@ -156,5 +156,6 @@ For Docker Compose, the environment variables for the backend and database are d
 ### **Helpful Links**
 - **Backend API**: `http://localhost:8080`
 - **Frontend**: `http://localhost:4200`
+- **DB**: `http://localhost:5433`
 
 Feel free to report any issues or request features. 🚀
